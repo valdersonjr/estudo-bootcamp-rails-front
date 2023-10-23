@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, HeadersDefaults } from 'axios';
+import axios from 'axios';
 import Cookie from 'js-cookie';
 import ApiData from '../dtos/apiData';
 
@@ -24,7 +24,7 @@ api.interceptors.response.use(res => {
             ...apiData, // Add the headers from ApiData
         };
 
-        api.defaults.headers = headers as any;
+        api.defaults.headers = headers;
 
         Cookie.set('@api-data', apiData);
     }
@@ -35,7 +35,7 @@ api.interceptors.response.use(res => {
 api.interceptors.request.use(req => {
     if (req.url.includes('admin')) {
         const apiData: ApiData = JSON.parse(Cookie.get('@api-data'));
-        req.headers = apiData as any;
+        req.headers = apiData;
     }
 
     return req;
