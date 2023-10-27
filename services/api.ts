@@ -1,45 +1,79 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import Cookie from 'js-cookie';
-import ApiData from '../dtos/apiData';
+import ApiData from '../dtos/ApiData';
+import ApiResponseError from '../dtos/ApiResponseError';
 
+// importação do router para que possamos realizar o redirect caso o usuário recebe a mensagem da api de que não acesso ao recurso que tentou acessar.
 import Router from 'next/router';
+import { toast } from 'react-toastify';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000'
+  baseURL: 'http://localhost:3000'
 });
 
 
 api.interceptors.response.use(res => {
-    if (res.headers['access-token']) {
-        const apiData: ApiData = {
-            'access-token': res.headers['access-token'],
-            client: res.headers.client,
-            expiry: res.headers.expiry,
-            'token-type': res.headers['token-type'],
-            uid: res.headers.uid
-        };
+  console.log("Chegou aqui --->:", res)
+  setHeaders(res);
+  return res;
+}
+, err => {
+  // caso um erro ocorra na response, um novo token é retornado, logo devemos atualizá-lo na api e nos cookies
+  if (err.response) {
+    setHeaders(err.response);
 
-        const headers = {
-            ...api.defaults.headers, // Copy the existing headers
-            ...apiData, // Add the headers from ApiData
-        };
+    const data = err.response.data;
 
-        api.defaults.headers = headers;
+    // aqui estamos tratando os erros no padrão que o rails no devolve, se existem algum array de erros, iremos extrair o nome do campo e as mensagens para que as mesmas possam ser exibidas na tela utilizando um toast
+    if (data && data.errors && data.errors.fields) {
+      const errors = data.errors as ApiResponseError;
 
-        Cookie.set('@api-data', apiData);
+      const fieldsName = Object.keys(errors.fields)
+
+      fieldsName.forEach(error => {
+        toast.error(error + ': ' + errors.fields[error].join(`, `))
+      })
+
+      console.log('errors', errors);
     }
+  }
 
-    return res;
+  // caso a response tenha um status de não autorizado ou acesso negado, o usuário será redirecionado para o login.
+  if (err.response && (
+      err.response.status === 401 ||
+      err.response.status === 403
+    )) {
+    Router.push('/Auth/Login');
+  }
+
+  throw err;
 });
 
 api.interceptors.request.use(req => {
-    if (req.url.includes('admin')) {
-        const apiData: ApiData = JSON.parse(Cookie.get('@api-data'));
-        req.headers = apiData;
-    }
+  if(req.url.includes('admin')) {
+    const apiData: ApiData = JSON.parse(Cookie.get('@api-data'));
+    req.headers = apiData;
+  }
 
-    return req;
-});
+  return req;
+})
 
+// adição da função para setar os headers de authẽnticação na api e nos cookies do browser, iremos utilizar ela no interceptor de request (tanto no fluxo normal quando no fluxo de erro).
+function setHeaders(res: AxiosResponse<any>) {
+  console.log("Chegou aqui", res.headers)
+  if(res.headers['access-token'] && res.headers['access-token'] !== '') {
+    const apiData: ApiData = {
+      'access-token': res.headers['access-token'],
+      client: res.headers.client,
+      expiry: res.headers.expiry,
+      'token-type': res.headers['token-type'],
+      uid: res.headers.uid
+    };
+
+    api.defaults.headers = apiData;
+    Cookie.set('@api-data', apiData);
+    console.log('apiData', apiData)
+  }
+}
 
 export default api;
