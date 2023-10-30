@@ -21,6 +21,7 @@ import Product from '../../../../dtos/Product';
 
 import { setProductToEdit } from '../../../../store/modules/admin/product/reducer';
 import { useRouter } from 'next/router';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const defaultUrl = '/admin/v1/products';
 
@@ -77,7 +78,7 @@ const List: React.FC = () => {
             <TitleAdminPanel
                 title="Produtos"
                 path="Dashboard > Produtos"
-                icon={faGamepad}
+                icon={faGamepad as IconProp}
                 newPath="/Admin/Products/New"
             />
 
@@ -116,7 +117,7 @@ const List: React.FC = () => {
                                     <td>
                                         <div className={styles.hover}>
                                             <FontAwesomeIcon
-                                                icon={faEdit}
+                                                icon={faEdit as IconProp}
                                                 onClick={() => handleEdit(product)}
                                             />
                                         </div>
@@ -124,7 +125,7 @@ const List: React.FC = () => {
                                     <td>
                                         <div className={styles.hover}>
                                             <FontAwesomeIcon
-                                                icon={faTrash}
+                                                icon={faTrash as IconProp}
                                                 onClick={() => handleShow(product.id)} />
                                         </div>
                                     </td>

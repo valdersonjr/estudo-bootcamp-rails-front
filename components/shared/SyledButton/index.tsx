@@ -6,7 +6,7 @@ import styles from '../../../styles/StyledButton.module.css';
 import { type } from 'os';
 
 type ButtonProps =  ButtonHTMLAttributes<HTMLButtonElement> & {
-    icon?: IconProp;
+    icon?: IconProp | any;
     action?: string;
     type_button: string;
     active?: boolean;
