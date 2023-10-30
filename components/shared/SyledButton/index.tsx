@@ -3,15 +3,17 @@ import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import styles from '../../../styles/StyledButton.module.css';
+import { type } from 'os';
 
 type ButtonProps =  ButtonHTMLAttributes<HTMLButtonElement> & {
     icon?: IconProp;
     action?: string;
     type_button: string;
     active?: boolean;
+    type?: "button" | "submit" | "reset" | undefined;
 }
 
-const StyledButton: React.FC<ButtonProps> = ({icon, action, type_button, active = false, ...rest}) => {
+const StyledButton: React.FC<ButtonProps> = ({icon, action, type_button, active = false, type, ...rest}) => {
     return (
         <Button 
             className={`
@@ -19,6 +21,7 @@ const StyledButton: React.FC<ButtonProps> = ({icon, action, type_button, active 
                 ${active ? 'active' : ''}
             `
             }
+            type={type}
             // {...rest}
             >
             { icon && <FontAwesomeIcon icon={icon} className={action && "mr-2"} /> } {action}

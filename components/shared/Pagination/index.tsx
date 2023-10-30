@@ -23,6 +23,7 @@ const Pagination: React.FunctionComponent<Meta> =
 
   // método utilizado para tratar a seleção das páginas
   const handlePageClick = (page: string): void => {
+    console.log(page);
     router.push({
       pathname: router.pathname,
       query: {
