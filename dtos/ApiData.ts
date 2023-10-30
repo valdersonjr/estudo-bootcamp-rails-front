@@ -4,4 +4,6 @@ export default interface ApiData {
     expiry: string;
     'token-type': string;
     uid: string;
+    'Access-Control-Allow-Origin':string;
+    'Access-Control-Allow-Credentials': string;
 }

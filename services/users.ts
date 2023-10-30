@@ -31,7 +31,7 @@ const UsersService = {
       password_confirmation
     }),
   signIn: ({ email, password }: SignInData) => 
-    api.post<SignInResponse>('auth/v1/user/sign_in', {
+    api.post<SignInResponse>('/auth/v1/user/sign_in', {
       email,
       password
     }),
