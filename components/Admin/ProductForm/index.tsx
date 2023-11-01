@@ -38,20 +38,21 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
   const [systemRequirement, setSystemRequirement] = useState(1);
 
   const [productImage, setProductImage] = useState('');
+  const [featured, setFeatured] = useState('false');
 
   const product: Product = useSelector((state:any) => state.product);
 
   // o produto necessita ter uma ou várias categorias e um requisito de sistema, por isso precisamos fazer o fetch dos mesmos e listá-los no form para utilização.
   // length=999 para pegar 999 categorias e 999 requerimentos de sistema
   const { data, error } = useSwr('/admin/v1/categories?length=999', CategoriesService.index);
-  const { data: systemRequirementsData, error: systemRequirementsError } = 
+  const { data: systemRequirementsData, error: systemRequirementsError } =
     useSwr('/admin/v1/system_requirements?length=999', SystemRequirementsService.index);
 
   const router = useRouter();
   const dispatch = useDispatch();
 
   // checando se o produto existe e se é a edição do mesmo para que sejam setados os valores que estão salvos no estado do redux no form.
-  useEffect (() => {
+  useEffect(() => {
     if (product && router.pathname.includes('Edit')) {
       setName(product.name);
       setId(product.id);
@@ -59,9 +60,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
 
       setCategories(product.categories.map(category => category.id));
 
-      setMode(product.mode);      
+      setMode(product.mode);
       setDeveloper(product.developer);
-
 
       // separando a data no T e pegando apenas o valor da data '2020-12-31T00:00:000Z'
       setReleaseDate(product.release_date.split('T')[0]);
@@ -71,6 +71,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
 
       setPrice(product.price);
       setStatus(product.status);
+
+      setFeatured(product.featured);
 
       setProductImage(product?.image_url);
     }
@@ -88,7 +90,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
 
     // mandando cada categoria selecionada como um campo
     // no form data
-    categories.forEach(category => 
+    categories.forEach(category =>
       formData.append(`product[category_ids][]`, category)
     )
 
@@ -101,6 +103,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
     formData.append('product[status]', status);
 
     formData.append('product[productable]', 'game');
+    formData.append('product[featured]', featured);
 
     if (image) {
       formData.append('product[image]', image);
@@ -110,7 +113,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
   }
 
   // método para selecionarmos os ids das categorias selecionadas e retorná-los em um array de inteiros. Aqui também utizamos a interface HTMLSelectElement possui os dados padrão do html de um input do tipo de select
-  const handleCategoriesSelect = 
+  const handleCategoriesSelect =
     (evt: React.ChangeEvent<HTMLSelectElement>): void => {
       const options = evt.target.selectedOptions;
       if (options) {
@@ -120,7 +123,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
         }
         setCategories(selectedCategories);
       }
-  }
+    }
 
   if (error || systemRequirementsError) {
     toast.error('Ocorreu um erro ao obter as categorias/requisitos de sistema, tente novamente.');
@@ -167,7 +170,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
                   }
                 />
               </Form.Group>
-              </Form.Row>
+            </Form.Row>
 
             <Form.Row>
               <Form.Group as={Col} sm={12} className="p-2">
@@ -185,13 +188,13 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
                   required
                 />
               </Form.Group>
-              </Form.Row>
+            </Form.Row>
 
             <Form.Row>
               <Form.Group as={Col} sm={12} className="p-2">
                 <Form.Label>Categorias</Form.Label>
-                <Form.Control 
-                  as="select" 
+                <Form.Control
+                  as="select"
                   className={styles.secundary_input}
                   onChange={handleCategoriesSelect}
                   value={categories}
@@ -200,17 +203,17 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
                 >
                   {
                     data?.categories.map(category => (
-                      <option 
-                        value={category.id} 
+                      <option
+                        value={category.id}
                         key={category.id}
                       >
                         {category.name}
-                        </option>
+                      </option>
                     ))
                   }
                 </Form.Control>
-                </Form.Group>
-              </Form.Row>
+              </Form.Group>
+            </Form.Row>
 
             <Form.Row>
               <Form.Group as={Col} md={6} sm={12} className="p-2">
@@ -227,8 +230,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
                   <option value="pve">PVE</option>
                   <option value="pvp">PVP</option>
                   <option value="both">Ambos</option>
-                  </Form.Control>
-                  </Form.Group>
+                </Form.Control>
+              </Form.Group>
 
               <Form.Group as={Col} md={6} sm={12} className="p-2">
                 <Form.Label>Desenvolvedora</Form.Label>
@@ -244,8 +247,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
                   required
                 >
                 </Form.Control>
-                </Form.Group>
-                </Form.Row>
+              </Form.Group>
+            </Form.Row>
 
             <Form.Row>
               <Form.Group as={Col} md={6} sm={12} className="p-2">
@@ -262,7 +265,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
                   required
                 >
                 </Form.Control>
-                </Form.Group>
+              </Form.Group>
 
               <Form.Group as={Col} md={6} sm={12} className="p-2">
                 <Form.Label>Requerimentos do Sistema</Form.Label>
@@ -278,22 +281,38 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
                 >
                   {
                     systemRequirementsData?.system_requirements.map(
-                        systemRequirement => (
-                          <option 
-                            value={systemRequirement.id}
-                            key={systemRequirement.id}
-                          >
-                            {systemRequirement.name}
-                            </option>
-                        )
+                      systemRequirement => (
+                        <option
+                          value={systemRequirement.id}
+                          key={systemRequirement.id}
+                        >
+                          {systemRequirement.name}
+                        </option>
                       )
+                    )
                   }
-                  </Form.Control>
-                </Form.Group>
-              </Form.Row>
+                </Form.Control>
+              </Form.Group>
+            </Form.Row>
 
-            <Form.Row>              
-              <Form.Group as={Col} md={6} sm={12} className="p-2">
+            <Form.Row>
+              <Form.Group as={Col} md={4} sm={12} className="p-2">
+                <Form.Label>Em Destaque</Form.Label>
+                <Form.Control
+                  as="select"
+                  className={styles.secundary_input}
+                  value={featured}
+                  onChange={
+                    (evt: React.ChangeEvent<HTMLSelectElement>) =>
+                      setFeatured(evt.target.value)
+                  }
+                >
+                  <option value="false">Não</option>
+                  <option value="true">Sim</option>
+                </Form.Control>
+              </Form.Group>
+
+              <Form.Group as={Col} md={4} sm={12} className="p-2">
                 <Form.Label>Preço</Form.Label>
                 <Form.Control
                   type="text"
@@ -308,7 +327,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
                 />
               </Form.Group>
 
-              <Form.Group as={Col} md={6} sm={12} className="p-2">
+              <Form.Group as={Col} md={4} sm={12} className="p-2">
                 <Form.Label>Status</Form.Label>
                 <Form.Control
                   as="select"
@@ -321,13 +340,13 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
                 >
                   <option value="available">Disponível</option>
                   <option value="unavailable">Indisponível</option>
-                  </Form.Control>
-                </Form.Group>
+                </Form.Control>
+              </Form.Group>
 
-              </Form.Row>
+            </Form.Row>
 
-            </Col>
-          </Row>
+          </Col>
+        </Row>
 
         <div className={styles.details_button}>
           <StyledButton
@@ -348,7 +367,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit, action = 'Adici
             }}
           />
         </div>
-        </Form>
+      </Form>
     </div>
   )
 }

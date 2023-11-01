@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import styles from './styles.module.css';
 import { InputGroup, FormControl, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import styles from './styles.module.css';
-import StyledButton from '../../SyledButton';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Link from 'next/link';
 
 import { useDispatch } from 'react-redux';
-import { setSearch as setSearchRedux, clearSearch } from '../../../../store/modules/admin/shared/search/reducer';
+import {
+    setSearch as setSearchRedux,
+    clearSearch
+} from '../../../../store/modules/admin/shared/search/reducer';
 
 import { useRouter } from 'next/router';
+import StyledButton from '../../SyledButton';
 
 interface SearchAndIcon {
     icon: IconProp;
@@ -19,35 +22,66 @@ interface SearchAndIcon {
 
 const SearchAndIcon: React.FC<SearchAndIcon> = ({ icon, newPath }) => {
     const [search, setSearch] = useState('');
+    const [placeholder, setPlaceholder] = useState('');
     const dispatch = useDispatch();
     const router = useRouter();
 
     useEffect(() => {
         dispatch(clearSearch());
-    }, []);
+    }, [])
+
+    useEffect(() => {
+        switch (router.pathname) {
+            case '/Admin/Products/List':
+                setPlaceholder('Pesquisar produto');
+                break;
+            case '/Admin/Categories/List':
+                setPlaceholder('Pesquisar categoria');
+                break;
+            case '/Admin/SystemRequirements/List':
+                setPlaceholder('Pesquisar requisitos de sistema');
+                break;
+            case '/Admin/Coupons/List':
+                setPlaceholder('Pesquisar cupons');
+                break;
+            default:
+                setPlaceholder('Pesquisar usuário');
+                break;
+        }
+    }, [router.pathname])
 
     const handleSearch = (): void => {
-        router.replace(router.pathname, `?page=1`);
+        router.replace(router.pathname, '?page=1');
         dispatch(setSearchRedux(search));
     }
 
     return (
         <Row>
-            <Col lg={9} xs>
+            <Col lg={10} xs>
                 <Row>
-                    <Col lg={9} xs={10}>
+                    <Col lg={10} xs={10}>
                         <InputGroup>
                             <FormControl
-                                placeholder="Pesquisar"
+                                placeholder={placeholder}
                                 className={styles.input}
                                 value={search}
-                                onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setSearch(evt.target.value)}
-                                onKeyPress={(evt: React.KeyboardEvent<HTMLInputElement>) => evt.key.toLocaleLowerCase() === 'enter' && handleSearch()}
+                                onChange={
+                                    (evt: React.ChangeEvent<HTMLInputElement>) =>
+                                        setSearch(evt.target.value)
+                                }
+
+                                onKeyPress={
+                                    (evt: React.KeyboardEvent<HTMLInputElement>) => {
+                                        if (evt.key.toLocaleLowerCase() === 'enter') {
+                                            handleSearch();
+                                        }
+                                    }
+                                }
                             />
                         </InputGroup>
                     </Col>
 
-                    <Col lg={3} xs={2} className={styles.search_icon} style={{ cursor: 'pointer' }}>
+                    <Col lg={2} xs={2} className={styles.search_icon}>
                         <FontAwesomeIcon
                             icon={faSearch as IconProp}
                             size="lg"
@@ -60,9 +94,9 @@ const SearchAndIcon: React.FC<SearchAndIcon> = ({ icon, newPath }) => {
             </Col>
 
             <Col lg={2} xs={{ span: 3 }} className={styles.titleButton}>
-                <Link href={newPath} >
+                <Link href={newPath}>
                     <a>
-                        <StyledButton icon={icon as IconProp} action="Pesquisar" type_button="blue" />
+                        <StyledButton icon={icon} type_button="blue" />
                     </a>
                 </Link>
             </Col>
