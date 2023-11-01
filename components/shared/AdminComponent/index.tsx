@@ -1,8 +1,8 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
-import AdminHeader from '../Header/AdminHeader';
-import AdminFooter from '../Footer/AdminFooter';
+import AdminHeader from '../AdminHeader';
 import LateralMenu from '../LateralMenu';
+import AdminFooter from '../AdminFooter';
 
 interface AdminComponentProps {
     children: React.ReactNode

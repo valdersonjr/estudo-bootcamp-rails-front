@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faGhost } from '@fortawesome/free-solid-svg-icons';
 import AdminListTable from '../../../../components/shared/AdminListTable';
 import AdminDeleteModal from '../../../../components/shared/AdminDeleteModal';
-import styles from '../../../../styles/AdminPanel.module.css';
 import NoData from '../../../../components/shared/NoData';
 
 import withAuthAdmin from '../../../../components/withAuthAdmin';
@@ -22,6 +21,7 @@ import { useRouter } from 'next/router';
 const defaultUrl = '/admin/v1/categories';
 
 import UrlService from '../../../../util/UrlService';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const List: React.FC = () => {
   // estado para controlar a exibição do modal de exclusão
@@ -89,7 +89,7 @@ const List: React.FC = () => {
       <TitleAdminPanel 
         title="Categorias" 
         path="Dashboard > Categorias" 
-        icon={faGhost} 
+        icon={faGhost as IconProp} 
         newPath="/Admin/Categories/New"/>
 
       <AdminDeleteModal handleClose={handleClose} show={show} target="categoria" />
@@ -100,21 +100,21 @@ const List: React.FC = () => {
           <AdminListTable first_title="Nome da categoria" meta={data.meta}>
             {
               data.categories.map(category => (
-                <tr className={styles.table_line} key={category.id}>
+                <tr key={category.id}>
                   <td>{category.name}</td>
                   <td>
-                    <div className={styles.hover}>
+                    <div>
                       <FontAwesomeIcon 
-                        icon={faEdit} 
+                        icon={faEdit as IconProp} 
                         onClick={() => handleEdit(category)}
                       />
                     </div>
                     </td>
 
                   <td>
-                    <div className={styles.hover}>
+                    <div>
                       <FontAwesomeIcon 
-                        icon={faTrash} 
+                        icon={faTrash as IconProp} 
                         onClick={() => handleShow(category.id)} 
                       />
                     </div>

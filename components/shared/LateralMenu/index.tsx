@@ -1,11 +1,12 @@
 import React from 'react';
-import styles from '../../../styles/MenuLateral.module.css';
+import styles from './styles.module.css';
 import Logo from '../Logo';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignal, faUser, faGamepad, faCheckSquare, faLaptop, faTicketAlt, faDollarSign, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { useRouter } from 'next/router';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 // import SignOutService from '../../../util/SignOutService';
 
@@ -20,7 +21,7 @@ const LateralMenu: React.FC = () => {
                 <Link href="/Admin">
                     <a className={`${router.pathname === '/Admin' ? styles.active : ''}`}>
                         <FontAwesomeIcon
-                            icon={faSignal}
+                            icon={faSignal as IconProp}
                             color="var(--color-gray-light)"
                             className="mr-3"
                         />
@@ -31,7 +32,7 @@ const LateralMenu: React.FC = () => {
 
                 <Link href="/Admin/Users/List">
                     <a className={`${router.pathname === '/Admin/Users/List' ? styles.active : ''}`}>
-                        <FontAwesomeIcon icon={faUser} color="var(--color-gray-light)" className="mr-3" />
+                        <FontAwesomeIcon icon={faUser as IconProp} color="var(--color-gray-light)" className="mr-3" />
                         Usuários
                         <hr />
                     </a>
@@ -39,7 +40,7 @@ const LateralMenu: React.FC = () => {
 
                 <Link href="/Admin/Products/List">
                     <a className={`${router.pathname === '/Admin/Products/List' ? styles.active : ''}`}>
-                        <FontAwesomeIcon icon={faGamepad} color="var(--color-gray-light)" className="mr-3" />
+                        <FontAwesomeIcon icon={faGamepad as IconProp} color="var(--color-gray-light)" className="mr-3" />
                         Produtos
                         <hr />
                     </a>
@@ -47,7 +48,7 @@ const LateralMenu: React.FC = () => {
 
                 <Link href="/Admin/Categories/List">
                     <a className={`${router.pathname === '/Admin/Categories/List' ? styles.active : ''}`}>
-                        <FontAwesomeIcon icon={faCheckSquare} color="var(--color-gray-light)" className="mr-3" />
+                        <FontAwesomeIcon icon={faCheckSquare as IconProp} color="var(--color-gray-light)" className="mr-3" />
                         Categorias
                         <hr />
                     </a>
@@ -55,7 +56,7 @@ const LateralMenu: React.FC = () => {
 
                 <Link href="/Admin/SystemRequirements/List">
                     <a className={`${router.pathname === '/Admin/SystemRequirements/List' ? styles.active : ''}`}>
-                        <FontAwesomeIcon icon={faLaptop} color="var(--color-gray-light)" className="mr-3" />
+                        <FontAwesomeIcon icon={faLaptop as IconProp} color="var(--color-gray-light)" className="mr-3" />
                         Requisitos do sistema
                         <hr />
                     </a>
@@ -63,7 +64,7 @@ const LateralMenu: React.FC = () => {
 
                 <Link href="/Admin/Coupons/List">
                     <a className={`${router.pathname === '/Admin/Coupons/List' ? styles.active : ''}`}>
-                        <FontAwesomeIcon icon={faTicketAlt} color="var(--color-gray-light)" className="mr-3" />
+                        <FontAwesomeIcon icon={faTicketAlt as IconProp} color="var(--color-gray-light)" className="mr-3" />
                         Cupons
                         <hr />
                     </a>
@@ -71,7 +72,7 @@ const LateralMenu: React.FC = () => {
 
                 <Link href="/Admin/Orders/List">
                     <a className={`${router.pathname === '/Admin/Orders/List' ? styles.active : ''}`}>
-                        <FontAwesomeIcon icon={faDollarSign} color="var(--color-gray-light)" className="mr-3" />
+                        <FontAwesomeIcon icon={faDollarSign as IconProp} color="var(--color-gray-light)" className="mr-3" />
                         Financeiro
                         <hr />
                     </a>
@@ -81,7 +82,7 @@ const LateralMenu: React.FC = () => {
                     <a
                     // onClick={SignOutService.execute}
                     >
-                        <FontAwesomeIcon icon={faSignOutAlt} color="var(--color-gray-light)" className="mr-3" />
+                        <FontAwesomeIcon icon={faSignOutAlt as IconProp} color="var(--color-gray-light)" className="mr-3" />
                         Sair
                         <hr />
                     </a>

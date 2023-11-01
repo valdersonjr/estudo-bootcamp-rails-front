@@ -6,7 +6,7 @@ import { faGhost, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux';
 
-import styles from '../../../styles/AdminPanel.module.css';
+import styles from '../styles.module.css';
 import Category from '../../../dtos/Category';
 
 import { clearCategoryToEdit } from '../../../store/modules/admin/category/reducer';

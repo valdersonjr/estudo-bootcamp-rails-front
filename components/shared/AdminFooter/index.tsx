@@ -1,13 +1,13 @@
 import React from 'react';
 import { Col, Row, Container } from 'react-bootstrap';
-import Logo from '../../Logo';
+import Logo from '../Logo';
 
 const AdminFooter: React.FC = () => {
     return (
         <Container className="p-4">
             <Row>
                 <Col>
-                    <Logo/>
+                    <Logo />
                 </Col>
 
                 <Col>

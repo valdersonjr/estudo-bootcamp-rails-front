@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { InputGroup, FormControl, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import styles from '../../../../styles/AdminTitle.module.css';
+import styles from './styles.module.css';
 import StyledButton from '../../SyledButton';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Link from 'next/link';
@@ -47,9 +47,9 @@ const SearchAndIcon: React.FC<SearchAndIcon> = ({ icon, newPath }) => {
                         </InputGroup>
                     </Col>
 
-                    <Col lg={3} xs={2} className="mt-1" style={{ cursor: 'pointer' }}>
+                    <Col lg={3} xs={2} className={styles.search_icon} style={{ cursor: 'pointer' }}>
                         <FontAwesomeIcon
-                            icon={faSearch}
+                            icon={faSearch as IconProp}
                             size="lg"
                             color="var(--color-gray-light)"
                             className="float-left"
@@ -62,7 +62,7 @@ const SearchAndIcon: React.FC<SearchAndIcon> = ({ icon, newPath }) => {
             <Col lg={2} xs={{ span: 3 }} className={styles.titleButton}>
                 <Link href={newPath} >
                     <a>
-                        <StyledButton icon={icon} action="Pesquisar" type_button="blue" />
+                        <StyledButton icon={icon as IconProp} action="Pesquisar" type_button="blue" />
                     </a>
                 </Link>
             </Col>

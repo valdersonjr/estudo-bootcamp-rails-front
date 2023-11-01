@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../../styles/AdminPanel.module.css';
+import styles from './styles.module.css';
 
 interface NoDataProps {
     message?: string

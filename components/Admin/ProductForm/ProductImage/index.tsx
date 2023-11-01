@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { Col } from 'react-bootstrap';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
-import styles from '../../../../styles/ProductForm.module.css';
+import styles from './styles.module.css';
 import StyledButton from '../../../shared/SyledButton';
 
 // estamos recebendo a função de setImage que virá do ProductForm, necessitamos dela pois vamos mandar o arquivo para a api e para exibir a imagem na tela utilizaremos o método Url.createObjectUrl que irá criar uma url fictícia para a imagem e assim a mesma será exibida na tela.
