@@ -7,7 +7,8 @@ import Logo from "../../Logo/index";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faShoppingCart, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
-import styles from '../../../../styles/Header.module.css';
+import styles from './styles.module.css';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const StoreFrontHeader: React.FC = () => {
     return(
@@ -27,13 +28,13 @@ const StoreFrontHeader: React.FC = () => {
                     <Col md={6}>
                         <Row>
                             <Col md={4} xs={4}>
-                                <FontAwesomeIcon icon={faSearch} color='var(--color-gray-light)' />
+                                <FontAwesomeIcon icon={faSearch as IconProp} color='var(--color-gray-light)' />
                             </Col>
                             <Col md={4} xs={4}>
-                                <FontAwesomeIcon icon={faShoppingCart} color='var(--color-gray-light)' />
+                                <FontAwesomeIcon icon={faShoppingCart as IconProp} color='var(--color-gray-light)' />
                             </Col>
                             <Col md={4} xs={4}>
-                                <FontAwesomeIcon icon={faUserCircle} color='var(--color-gray-light)' />
+                                <FontAwesomeIcon icon={faUserCircle as IconProp} color='var(--color-gray-light)' />
                             </Col>
                         </Row>
                     </Col>

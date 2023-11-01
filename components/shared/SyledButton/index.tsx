@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, KeyboardEventHandler } from 'react';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -21,7 +21,7 @@ const StyledButton: React.FC<ButtonProps> = ({icon, action, type_button, active 
             `
             }
             type={type}
-            // {...rest}
+            {...rest as KeyboardEventHandler<HTMLElement>}
             >
             { icon && <FontAwesomeIcon icon={icon} className={action && "mr-2"} /> } {action}
         </Button>

@@ -7,6 +7,7 @@ import { faSignal, faUser, faGamepad, faCheckSquare, faLaptop, faTicketAlt, faDo
 
 import { useRouter } from 'next/router';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import SignOutService from '../../../util/SignOutService';
 
 // import SignOutService from '../../../util/SignOutService';
 
@@ -80,7 +81,7 @@ const LateralMenu: React.FC = () => {
 
                 <Link href="/Auth/Login">
                     <a
-                    // onClick={SignOutService.execute}
+                    onClick={SignOutService.execute}
                     >
                         <FontAwesomeIcon icon={faSignOutAlt as IconProp} color="var(--color-gray-light)" className="mr-3" />
                         Sair

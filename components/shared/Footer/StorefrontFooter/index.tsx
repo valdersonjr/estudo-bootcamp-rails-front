@@ -1,10 +1,11 @@
 import React from 'react';
-import styles from '../../../../styles/Footer.module.css';
+import styles from './styles.module.css';
 import { Col, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faFacebookF, faInstagram, faYoutube, faTwitter, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import Logo from '../../Logo';
 import Image from 'next/image';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const StorefrontFooter: React.FC = () => {
     return (
@@ -20,23 +21,23 @@ const StorefrontFooter: React.FC = () => {
                             <Col lg={7} md={12} className="mb-4 mb-lg-0">
                                 <Row>
                                     <Col lg={1} xs={2}>
-                                        <FontAwesomeIcon icon={faFacebookF}  />
+                                        <FontAwesomeIcon icon={faFacebookF as IconProp}  />
                                     </Col>
 
                                     <Col lg={1} xs={2}>
-                                        <FontAwesomeIcon icon={faInstagram} />
+                                        <FontAwesomeIcon icon={faInstagram as IconProp} />
                                     </Col>
 
                                     <Col lg={1} xs={2}>
-                                        <FontAwesomeIcon icon={faYoutube}  />
+                                        <FontAwesomeIcon icon={faYoutube as IconProp}  />
                                     </Col>
 
                                     <Col lg={1} xs={2}>
-                                        <FontAwesomeIcon icon={faTwitter}  />
+                                        <FontAwesomeIcon icon={faTwitter as IconProp}  />
                                     </Col>
 
                                     <Col lg={1} xs={2}>
-                                        <FontAwesomeIcon icon={faLinkedin}  />
+                                        <FontAwesomeIcon icon={faLinkedin as IconProp}  />
                                     </Col>
                                 </Row>
                             </Col>
