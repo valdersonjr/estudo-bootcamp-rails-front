@@ -9,19 +9,20 @@ import { faSearch, faShoppingCart, faUserCircle } from '@fortawesome/free-solid-
 
 import styles from './styles.module.css';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import Link from 'next/link';
 
 const StoreFrontHeader: React.FC = () => {
     return(
         <Row className={styles.background}>
-            <Col md={8} className="mt-2">
+            <Col md={6} className="mt-2">
                 <Logo />
             </Col>
 
-            <Col md={4} className="mt-2 text-center">
+            <Col md={6} className="mt-2 text-center">
                 <Row>
                     <Col md={6} className="mb-4 mb-md-0">
                         <InputGroup>
-                            <FormControl placeholder="Search" />
+                            <FormControl placeholder="Pesquisar Produto" />
                         </InputGroup>
                     </Col>
 
@@ -34,7 +35,11 @@ const StoreFrontHeader: React.FC = () => {
                                 <FontAwesomeIcon icon={faShoppingCart as IconProp} color='var(--color-gray-light)' />
                             </Col>
                             <Col md={4} xs={4}>
-                                <FontAwesomeIcon icon={faUserCircle as IconProp} color='var(--color-gray-light)' />
+                                <Link href="/Auth/Login">
+                                    <a>
+                                        <FontAwesomeIcon icon={faUserCircle as IconProp} color='var(--color-gray-light)' />
+                                    </a>
+                                </Link>
                             </Col>
                         </Row>
                     </Col>
