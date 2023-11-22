@@ -1,19 +1,15 @@
 import React from 'react';
 import MainComponent from '../components/shared/MainComponent';
-import { useRouter  } from 'next/dist/client/router';
 
-import ProductInfo from '../components/shared/ProductInfo';
+import HightlightedProducts from '../components/Storefront/HighlightedProducts';
 
 
-const Home:React.FC = () => {
-  const router = useRouter();
-  
+const Home:React.FC = () => {  
   return (
     <MainComponent>
-      {/* <button  onClick={() => router.push('/Auth/Login')}>Login</button> */}
       <h1>Home</h1>
-      <ProductInfo />
-      <ProductInfo type="highlighted" />
+      <HightlightedProducts title='promo' />
+      <HightlightedProducts title='Em destaque'/>
     </MainComponent>
   )
 }
