@@ -5,17 +5,25 @@ import MainComponent from '../../components/shared/MainComponent';
 import styles from './styles.module.css';
 
 import BlueBackground from '../../components/shared/BlueBackground';
+
 import useSwr from 'swr';
 import { useRouter } from 'next/router';
 import ProductShowService from '../../services/productShow';
 
 import { toast } from 'react-toastify';
 import { format, parseJSON } from 'date-fns';
-import StyledButton from '../../components/shared/SyledButton';
 
-const Product: React.FC = () => {
+import ProductShowData from '../../dtos/ProductShowData';
+import StyledButton from '../../components/shared/SyledButton';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+
+const Product: React.FC<ProductShowData> = ({ product }) => {
   const router = useRouter();
-  const { data, error } = useSwr(`/storefront/v1/products/${router?.query?.id}`, ProductShowService.show);
+  const { data, error } = useSwr(
+    `/storefront/v1/products/${router?.query?.id}`, 
+    ProductShowService.show,
+    { initialData: product }
+  );
 
   if (error) {
     toast.error('Erro ao obter o produto');
@@ -108,11 +116,11 @@ const Product: React.FC = () => {
 
             <Row className="mt-4 text-center">
               <Col>
-                <StyledButton className={styles.gray_button} icon={faHeart} action="Favoritar" type_button="red" />
+                <StyledButton className={styles.gray_button} icon={faHeart as IconProp} action="Favoritar" type_button="red" />
               </Col>
 
               <Col>
-                <StyledButton icon={faCartPlus} action="Comprar" type_button="blue" />
+                <StyledButton icon={faCartPlus as IconProp} action="Comprar" type_button="blue" />
               </Col>
             </Row>
           </BlueBackground>
@@ -155,6 +163,11 @@ const Product: React.FC = () => {
       </Row>
     </MainComponent>
   );
+}
+
+export async function getServerSideProps({ params }) {
+  const product = await ProductShowService.show(`/storefront/v1/products/${params.id}`);
+  return { props: product };
 }
 
 export default Product;
