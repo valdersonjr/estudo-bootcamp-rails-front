@@ -23,16 +23,16 @@ const defaultUrl = '/storefront/v1/products';
 
 const Search: React.FC = () => {
   const router = useRouter();
-  const { 
-    search: searchRouter, 
-    page, 
-    category, 
-    price, 
-    order: orderRouter, 
-    direction 
+  const {
+    search: searchRouter,
+    page,
+    category,
+    price,
+    order: orderRouter,
+    direction
   } = router.query;
 
-  const [search, setSearch] = useState(searchRouter?.toString());
+  const [search, setSearch] = useState(searchRouter?.toString() || '');
   const [order, setOrder] = useState(() => {
     if (!!orderRouter) {
       return `${orderRouter.toString()}-${direction.toString()}`;
@@ -42,18 +42,18 @@ const Search: React.FC = () => {
   });
 
   const [url, setUrl] = useState(() => (
-      defaultUrl +
-      ProductSearchService.execute({
-        search,
-        order: orderRouter,
-        direction
-      })
-    )
+    defaultUrl +
+    ProductSearchService.execute({
+      search,
+      order: orderRouter,
+      direction
+    })
+  )
   );
 
   const { data, error } = useSwr(url, SearchService.execute);
 
-  const { data: categoriesData, error: categoriesError } = 
+  const { data: categoriesData, error: categoriesError } =
     useSwr('/storefront/v1/categories?length=999', CategoriesService.index);
 
 
@@ -69,7 +69,7 @@ const Search: React.FC = () => {
         direction
       })
     );
-  }, [setSearch, page, category, price, orderRouter, direction]);
+  }, [searchRouter, page, category, price, orderRouter, direction]);
 
   useEffect(() => {
     router.push({
@@ -85,7 +85,7 @@ const Search: React.FC = () => {
 
   const handleSearch = (): void => {
     router.push(`
-      /Search${ProductSearchService.execute({ search })}
+      /Search?search=${search}&length=12&page=1&order=price&direction=asc
     `);
   }
 
@@ -111,11 +111,11 @@ const Search: React.FC = () => {
         <Row className="text-center col-md-6 offset-md-3">
           <Col xs={10}>
             <InputGroup>
-              <FormControl 
+              <FormControl
                 placeholder="Pesquise!!"
                 value={search}
                 onChange={
-                  (evt: React.ChangeEvent<HTMLInputElement>) => 
+                  (evt: React.ChangeEvent<HTMLInputElement>) =>
                     setSearch(evt.target.value)
                 }
 
@@ -150,25 +150,25 @@ const Search: React.FC = () => {
           <Col sm={6} xs={12}>
             <div className={styles.ordenation}>
               <strong className="mr-3">Ordernar por:</strong>
-              <select 
+              <select
                 className={styles.secondary}
                 value={order}
                 onChange={
-                  (evt: React.ChangeEvent<HTMLSelectElement>) => 
+                  (evt: React.ChangeEvent<HTMLSelectElement>) =>
                     setOrder(evt.target.value)
                 }
               >
                 <option value="price-asc">Menor preço</option>
                 <option value="price-desc">Maior preço</option>
-                <option value="release_date-asc">Lançamentos</option>
-                <option value="release_date-desc">Mais antigos</option>
+                <option value="release_date-desc">Lançamentos</option>
+                <option value="release_date-asc">Mais antigos</option>
               </select>
             </div>
           </Col>
         </Row>
 
         <Row>
-          <select 
+          <select
             className={styles.primary}
             onChange={
               (evt: React.ChangeEvent<HTMLSelectElement>) => {
@@ -198,7 +198,7 @@ const Search: React.FC = () => {
             }
           </select>
 
-          <select 
+          <select
             className={styles.primary}
             onChange={
               (evt: React.ChangeEvent<HTMLSelectElement>) => {
@@ -236,7 +236,7 @@ const Search: React.FC = () => {
           data?.products?.map(
             product => (
               <Col md={3} key={product.id}>
-                <ProductInfo product={product}/>
+                <ProductInfo product={product} />
               </Col>
             )
           )

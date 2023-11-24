@@ -19,7 +19,9 @@ const StoreFrontHeader: React.FC = () => {
     const router = useRouter();
 
     const handleSearch = (): void => {
-        router.push(`/Search${ProductSearchService.execute({ search })}`);
+        router.push(`
+            /Search?search=${search}&length=12&page=1&order=price&direction=asc
+        `);
     }
     return (
         <Row className={styles.background}>
