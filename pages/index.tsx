@@ -10,12 +10,22 @@ import { toast } from 'react-toastify';
 
 import { useRouter } from 'next/router';
 
-const Storefront: React.FC = () => {
-  const { data, error } = useSwr('/storefront/v1/home', HomeService.index);
-  const { featured, last_releases, cheapest } = { ...data };
+import HomeIndexData from '../dtos/HomeIndexData';
+
+interface StorefrontProps {
+  products: HomeIndexData;
+}
+
+const Storefront: React.FC<StorefrontProps> = ({ products }) => {
+  const { data, error } = useSwr(
+    '/storefront/v1/home',
+    HomeService.index,
+    { initialData: products }
+  );
+  const { featured, last_releases, cheapest } = data;
   const router = useRouter();
 
-  if (error)  {
+  if (error) {
     toast.error('Erro ao obter dados da home!');
     console.log(error);
   }
@@ -26,12 +36,12 @@ const Storefront: React.FC = () => {
         {
           featured?.slice(0, 3)?.map(
             product => (
-              <Carousel.Item 
+              <Carousel.Item
                 key={product.id}
                 onClick={() => router.push(`/Product/${product.id}`)}
                 className={styles.carousel_item}
               >
-                <img 
+                <img
                   className={`d-block w-100 ${styles.carousel_image}`}
                   src={product.image_url}
                   alt={product.name}
@@ -42,8 +52,8 @@ const Storefront: React.FC = () => {
         }
       </Carousel>
 
-      <HightlightedProducts 
-        title="Ofertas da semana" 
+      <HightlightedProducts
+        title="Ofertas da semana"
         type="highlighted"
         products={cheapest}
         handleSeeMore={
@@ -57,7 +67,7 @@ const Storefront: React.FC = () => {
         }
       />
 
-      <HightlightedProducts 
+      <HightlightedProducts
         title="Lançamentos"
         products={last_releases}
         handleSeeMore={
@@ -71,15 +81,20 @@ const Storefront: React.FC = () => {
         }
       />
 
-      <HightlightedProducts 
+      <HightlightedProducts
         title="Mais populares"
         products={featured}
         handleSeeMore={
-          () => router.push({pathname: '/Search'})
+          () => router.push({ pathname: '/Search' })
         }
       />
     </MainComponent>
   )
+}
+
+export async function getStaticProps(context) {
+  const products = await HomeService.index('/storefront/v1/home');
+  return { props: { products } }
 }
 
 export default Storefront;
