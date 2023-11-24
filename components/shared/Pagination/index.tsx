@@ -1,17 +1,16 @@
 import { useState, useEffect, HtmlHTMLAttributes } from 'react';
 import Meta from '../../../dtos/Meta';
+import PaginationService from '../../../util/PaginationService';
 
 import { useRouter } from 'next/router';
 import StyledButton from '../SyledButton';
-import PaginationService from '../../../util/PaginationService';
 
 type PaginationProps = HtmlHTMLAttributes<HTMLDivElement> & {
   page: number;
   total_pages: number;
 }
 
-const Pagination: React.FunctionComponent<Meta> = 
-  ({ page, total_pages, ...rest }: PaginationProps) => {
+const Pagination: React.FunctionComponent<Meta> = ({ page, total_pages, ...rest }: PaginationProps) => {
 
   const [pagination, setPagination] = useState(['1']);
   const router = useRouter();
@@ -23,7 +22,6 @@ const Pagination: React.FunctionComponent<Meta> =
 
   // método utilizado para tratar a seleção das páginas
   const handlePageClick = (page: string): void => {
-    console.log(page);
     router.push({
       pathname: router.pathname,
       query: {
