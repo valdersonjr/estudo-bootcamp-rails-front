@@ -1,18 +1,21 @@
 import { useState } from 'react';
 import styles from './styles.module.css';
-import { InputGroup, FormControl, Row, Col, Badge } from 'react-bootstrap';
+import { InputGroup, FormControl, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faShoppingCart, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../Logo';
 
 import { useRouter } from 'next/router';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import LoggedService from '../../../../util/LoggedService';
 
+import Badge from '../../Badge';
+import CartModal from '../../../Storefront/CartModal';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const CustomerHeader: React.FC = () => {
     const [search, setSearch] = useState('');
+    const [showCartModal, setShowCartModal] = useState(false);
 
     const router = useRouter();
 
@@ -70,9 +73,17 @@ const CustomerHeader: React.FC = () => {
                             </Col>
 
                             <Col>
-                                <div>
-                                    <FontAwesomeIcon icon={faShoppingCart as IconProp} color="var(--color-gray-light)" />
+                                <div className={styles.cart_container}>
+                                    <FontAwesomeIcon
+                                        icon={faShoppingCart as IconProp}
+                                        color="var(--color-gray-light)"
+                                        onClick={() => setShowCartModal(!showCartModal)}
+                                    />
                                     <Badge>5</Badge>
+                                    {
+                                        showCartModal &&
+                                        <CartModal searchPage={router.pathname === '/Search'} />
+                                    }
                                 </div>
                             </Col>
 
