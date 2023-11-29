@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './styles.module.css';
-import { InputGroup, FormControl, Row, Col } from 'react-bootstrap';
+import { InputGroup, FormControl, Row, Col, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faShoppingCart, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../Logo';
@@ -70,7 +70,10 @@ const CustomerHeader: React.FC = () => {
                             </Col>
 
                             <Col>
-                                <FontAwesomeIcon icon={faShoppingCart as IconProp} color="var(--color-gray-light)" />
+                                <div>
+                                    <FontAwesomeIcon icon={faShoppingCart as IconProp} color="var(--color-gray-light)" />
+                                    <Badge>5</Badge>
+                                </div>
                             </Col>
 
                             <Col>
