@@ -55,7 +55,7 @@ const Product: React.FC<ProductShowData> = ({ product }) => {
 
   return (
     <MainComponent>
-      <Row className="mt-4 mb-4">
+      <Row className="mt-4 mb-4 text-white">
         <Col md={6}>
           <img
             className="w-100"
@@ -154,7 +154,7 @@ const Product: React.FC<ProductShowData> = ({ product }) => {
             </Row>
           </BlueBackground>
 
-          <div className="mt-4">
+          <div className="mt-4 text-white">
             <BlueBackground>
               <strong>Requisitos do sistema</strong>
 
