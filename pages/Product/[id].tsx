@@ -17,6 +17,9 @@ import ProductShowData from '../../dtos/ProductShowData';
 
 import LoggedService from '../../util/LoggedService';
 import WishlistService from '../../services/wishlist';
+
+import { useDispatch } from 'react-redux';
+import { addCartProduct } from '../../store/modules/storefront/cartProducts/reducer';
 import StyledButton from '../../components/shared/SyledButton';
 
 const Product: React.FC<ProductShowData> = ({ product }) => {
@@ -26,6 +29,8 @@ const Product: React.FC<ProductShowData> = ({ product }) => {
     ProductShowService.show,
     { initialData: product }
   );
+
+  const dispatch = useDispatch();
 
   if (error) {
     toast.error('Erro ao obter o produto');
@@ -55,7 +60,7 @@ const Product: React.FC<ProductShowData> = ({ product }) => {
 
   return (
     <MainComponent>
-      <Row className="mt-4 mb-4 text-white">
+      <Row className="mt-4 mb-4">
         <Col md={6}>
           <img
             className="w-100"
@@ -149,12 +154,17 @@ const Product: React.FC<ProductShowData> = ({ product }) => {
               </Col>
 
               <Col>
-                <StyledButton icon={faCartPlus} action="Comprar" type_button="blue" />
+                <StyledButton
+                  icon={faCartPlus}
+                  action="Comprar"
+                  type_button="blue"
+                  onClick={() => dispatch(addCartProduct(data))}
+                />
               </Col>
             </Row>
           </BlueBackground>
 
-          <div className="mt-4 text-white">
+          <div className="mt-4">
             <BlueBackground>
               <strong>Requisitos do sistema</strong>
 
