@@ -14,13 +14,15 @@ import { toast } from 'react-toastify';
 import { format, parseJSON } from 'date-fns';
 
 import ProductShowData from '../../dtos/ProductShowData';
+
+import LoggedService from '../../util/LoggedService';
+import WishlistService from '../../services/wishlist';
 import StyledButton from '../../components/shared/SyledButton';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const Product: React.FC<ProductShowData> = ({ product }) => {
   const router = useRouter();
   const { data, error } = useSwr(
-    `/storefront/v1/products/${router?.query?.id}`, 
+    `/storefront/v1/products/${router?.query?.id}`,
     ProductShowService.show,
     { initialData: product }
   );
@@ -30,13 +32,34 @@ const Product: React.FC<ProductShowData> = ({ product }) => {
     console.log(error);
   }
 
+  const handleWishitem = async (): Promise<void> => {
+    if (LoggedService.execute()) {
+      try {
+        await WishlistService.add(data?.id);
+        toast.info('Adicionado a sua lista de desejos!');
+      } catch (error) {
+        toast.error('Erro ao adicionar a sua lista de desejos.');
+        console.log(error);
+      }
+
+      return;
+    }
+
+    router.push({
+      pathname: '/Auth/Login',
+      query: {
+        callback: router.pathname.replace('[id]', data?.id.toString())
+      }
+    });
+  }
+
   return (
     <MainComponent>
       <Row className="mt-4 mb-4">
         <Col md={6}>
-          <img 
+          <img
             className="w-100"
-            src={data?.image_url} 
+            src={data?.image_url}
             alt={data?.name}
           />
 
@@ -73,9 +96,9 @@ const Product: React.FC<ProductShowData> = ({ product }) => {
                 <div>
                   {
                     data?.categories?.map(
-                      category => 
-                        <Badge 
-                          variant="primary ml-1" 
+                      category =>
+                        <Badge
+                          variant="primary ml-1"
                           className={styles.primary_badge}
                         >
                           {category.name}
@@ -96,7 +119,7 @@ const Product: React.FC<ProductShowData> = ({ product }) => {
                 <p>
                   {
                     data?.release_date &&
-                      format(parseJSON(data.release_date), 'dd/MM/yyyy')
+                    format(parseJSON(data.release_date), 'dd/MM/yyyy')
                   }
                 </p>
               </Col>
@@ -112,15 +135,21 @@ const Product: React.FC<ProductShowData> = ({ product }) => {
               </Col>
             </Row>
 
-            <hr className={styles.line}/>
+            <hr className={styles.line} />
 
             <Row className="mt-4 text-center">
               <Col>
-                <StyledButton className={styles.gray_button} icon={faHeart as IconProp} action="Favoritar" type_button="red" />
+                <StyledButton
+                  className={styles.gray_button}
+                  icon={faHeart}
+                  action="Favoritar"
+                  type_button="red"
+                  onClick={handleWishitem}
+                />
               </Col>
 
               <Col>
-                <StyledButton icon={faCartPlus as IconProp} action="Comprar" type_button="blue" />
+                <StyledButton icon={faCartPlus} action="Comprar" type_button="blue" />
               </Col>
             </Row>
           </BlueBackground>

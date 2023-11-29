@@ -8,15 +8,26 @@ import Router from 'next/router';
 import { toast } from 'react-toastify';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
-  withCredentials: true,
+  baseURL: 'http://localhost:3000'
 });
 
+// adição da função para setar os headers de authẽnticação na api e nos cookies do browser, iremos utilizar ela no interceptor de request (tanto no fluxo normal quando no fluxo de erro).
+function setHeaders(res: AxiosResponse<any>) {
+  if(res.headers['access-token'] && res.headers['access-token'] !== '') {
+    const apiData: ApiData = {
+      'access-token': res.headers['access-token'],
+      client: res.headers.client,
+      expiry: res.headers.expiry,
+      'token-type': res.headers['token-type'],
+      uid: res.headers.uid
+    };
 
-api.interceptors.response.use((res:any)=> {
-  const accessToken = res.headers['access-token'];
-  console.log('Access Token:', accessToken);
-  // console.log(res);
+    api.defaults.headers = apiData;
+    Cookie.set('@api-data', apiData);
+  }
+}
+
+api.interceptors.response.use(res => {
   setHeaders(res);
   return res;
 }
@@ -54,30 +65,22 @@ api.interceptors.response.use((res:any)=> {
 
 api.interceptors.request.use(req => {
   req.headers = { ContentType: 'application/json' };
-  if(req.url.includes('admin')) {
-    const apiData: ApiData = JSON.parse(Cookie.get('@api-data') ? Cookie.get('@api-data') : '{}');
-    req.headers = {...apiData, ...req.headers};
+
+  if (
+    req.url.includes('admin') ||
+    req.url.includes('storefront/v1/wish_items')
+  ) {
+    const apiDataCookie = Cookie.get('@api-data');
+
+    if (!apiDataCookie) {
+      return req;
+    }
+
+    const apiData: ApiData = JSON.parse(apiDataCookie);
+    req.headers = { ...apiData, ...req.headers };
   }
 
   return req;
 })
-
-// adição da função para setar os headers de authẽnticação na api e nos cookies do browser, iremos utilizar ela no interceptor de request (tanto no fluxo normal quando no fluxo de erro).
-function setHeaders(res: AxiosResponse<any>) {
-  if(res.headers['access-token'] && res.headers['access-token'] !== '') {
-    const apiData: ApiData = {
-      'access-token': res.headers['access-token'],
-      client: res.headers.client,
-      expiry: res.headers.expiry,
-      'token-type': res.headers['token-type'],
-      uid: res.headers.uid,
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': 'true'
-    };
-
-    api.defaults.headers = apiData;
-    Cookie.set('@api-data', apiData);
-  }
-}
 
 export default api;
