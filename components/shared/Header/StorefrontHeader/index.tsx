@@ -1,28 +1,33 @@
-import React, { useState } from 'react';
-
-import { Row, Col, InputGroup, FormControl } from 'react-bootstrap';
-
-import Logo from "../../Logo/index";
-
+import { useState } from 'react';
+import styles from './styles.module.css';
+import { InputGroup, FormControl, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faShoppingCart, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import Logo from '../../Logo';
 
-import styles from './styles.module.css';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import Link from 'next/link';
-
-import ProductSearchService from '../../../../util/ProductSearchService';
 import { useRouter } from 'next/router';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-const StoreFrontHeader: React.FC = () => {
+import LoggedService from '../../../../util/LoggedService';
+
+
+const CustomerHeader: React.FC = () => {
     const [search, setSearch] = useState('');
+
     const router = useRouter();
 
     const handleSearch = (): void => {
         router.push(`
-            /Search?search=${search}&length=12&page=1&order=price&direction=asc
-        `);
+      /Search?search=${search}&length=12&page=1&order=price&direction=asc
+    `);
     }
+
+    const handleUserRedirect = (): void => {
+        router.push(
+            LoggedService.execute() ? '/Profile' : 'Auth/Admin'
+        )
+    }
+
     return (
         <Row className={styles.background}>
             <Col md={6} className="mt-2">
@@ -32,7 +37,9 @@ const StoreFrontHeader: React.FC = () => {
             <Col md={6} className="mt-2 text-center">
                 <Row>
                     <Col md={6} className="mb-4 mb-md-0">
-                        <InputGroup className={`${router.pathname === '/Search' ? styles.hidden : ''}`}>
+                        <InputGroup
+                            className={`${router.pathname === '/Search' ? styles.hidden : ''}`}
+                        >
                             <FormControl
                                 placeholder="Pesquisar produto"
                                 value={search}
@@ -57,19 +64,21 @@ const StoreFrontHeader: React.FC = () => {
                             <Col className={`${router.pathname === '/Search' ? styles.hidden : ''}`}>
                                 <FontAwesomeIcon
                                     icon={faSearch as IconProp}
-                                    color='var(--color-gray-light)'
+                                    color="var(--color-gray-light)"
                                     onClick={handleSearch}
                                 />
                             </Col>
+
                             <Col>
-                                <FontAwesomeIcon icon={faShoppingCart as IconProp} color='var(--color-gray-light)' />
+                                <FontAwesomeIcon icon={faShoppingCart as IconProp} color="var(--color-gray-light)" />
                             </Col>
+
                             <Col>
-                                <Link href="/Auth/Login">
-                                    <a>
-                                        <FontAwesomeIcon icon={faUserCircle as IconProp} color='var(--color-gray-light)' />
-                                    </a>
-                                </Link>
+                                <FontAwesomeIcon
+                                    icon={faUserCircle as IconProp}
+                                    color="var(--color-gray-light)"
+                                    onClick={handleUserRedirect}
+                                />
                             </Col>
                         </Row>
                     </Col>
@@ -79,4 +88,4 @@ const StoreFrontHeader: React.FC = () => {
     )
 }
 
-export default StoreFrontHeader;
+export default CustomerHeader;
