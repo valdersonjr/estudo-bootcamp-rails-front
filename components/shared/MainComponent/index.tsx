@@ -8,7 +8,7 @@ interface MaincomponentProps {
 
 const MainComponent: React.FC<MaincomponentProps> = ({ children }) => {
     return(
-        <div className="d-flex flex-column sticky-footer-wrapper">
+        <div className="d-flex flex-column sticky-footer-wrapper text-white">
             <Header />
 
             <div className='container flex-fill'>

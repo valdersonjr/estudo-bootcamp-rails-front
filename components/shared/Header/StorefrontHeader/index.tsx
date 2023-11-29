@@ -11,11 +11,16 @@ import LoggedService from '../../../../util/LoggedService';
 
 import Badge from '../../Badge';
 import CartModal from '../../../Storefront/CartModal';
+
+import { useSelector } from 'react-redux';
+import ProductShow from '../../../../dtos/ProductShow';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const CustomerHeader: React.FC = () => {
     const [search, setSearch] = useState('');
     const [showCartModal, setShowCartModal] = useState(false);
+
+    const cartProducts: ProductShow[] = useSelector((state: any) => state.cartProducts);
 
     const router = useRouter();
 
@@ -79,9 +84,13 @@ const CustomerHeader: React.FC = () => {
                                         color="var(--color-gray-light)"
                                         onClick={() => setShowCartModal(!showCartModal)}
                                     />
-                                    <Badge>5</Badge>
                                     {
-                                        showCartModal &&
+                                        cartProducts?.length > 0 &&
+                                        <Badge>{cartProducts.length}</Badge>
+                                    }
+
+                                    {
+                                        cartProducts?.length > 0 && showCartModal &&
                                         <CartModal searchPage={router.pathname === '/Search'} />
                                     }
                                 </div>
